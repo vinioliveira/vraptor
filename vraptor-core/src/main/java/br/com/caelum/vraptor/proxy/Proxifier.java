@@ -22,5 +22,13 @@ package br.com.caelum.vraptor.proxy;
  * @author Fabio Kung
  */
 public interface Proxifier {
+    
+    /**
+     * Creates a proxy for class defined in type parameter.
+     * 
+     * @param type The proxy type.
+     * @param handler Callback for method invocation.
+     * @return The proxy.
+     */
     <T> T proxify(Class<T> type, MethodInvocation<? super T> handler);
 }

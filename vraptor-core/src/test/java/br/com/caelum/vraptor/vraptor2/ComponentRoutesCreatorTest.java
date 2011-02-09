@@ -43,7 +43,8 @@ import br.com.caelum.vraptor.http.route.DefaultRouteBuilder;
 import br.com.caelum.vraptor.http.route.NoTypeFinder;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.DefaultResourceClass;
 import br.com.caelum.vraptor.resource.ResourceClass;
@@ -61,7 +62,7 @@ public class ComponentRoutesCreatorTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        this.proxifier = new DefaultProxifier();
+        this.proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
         this.typeFinder = new NoTypeFinder();
 
         when(router.builderFor(anyString())).thenAnswer(new Answer<DefaultRouteBuilder>() {

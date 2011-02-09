@@ -28,16 +28,23 @@ import java.lang.reflect.Method;
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Fabio Kung
  */
-public class ObjenesisProxifierTest {
+public class JavassistProxifierTest {
 
+    private Proxifier proxifier;
+    
+    @Before
+    public void setUp() throws Exception {
+        proxifier= new JavassistProxifier(new ObjenesisInstanceCreator());
+    }
+    
     @Test
     public void shouldProxifyInterfaces() {
-        Proxifier proxifier = new ObjenesisProxifier();
         TheInterface proxy = proxifier.proxify(TheInterface.class, new MethodInvocation<TheInterface>() {
             public Object intercept(TheInterface proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return true;
@@ -48,7 +55,6 @@ public class ObjenesisProxifierTest {
 
     @Test
     public void shouldProxifyConcreteClassesWithDefaultConstructors() {
-        Proxifier proxifier = new ObjenesisProxifier();
         TheClass proxy = proxifier.proxify(TheClass.class, new MethodInvocation<TheClass>() {
             public Object intercept(TheClass proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return true;
@@ -59,7 +65,6 @@ public class ObjenesisProxifierTest {
 
     @Test
     public void shouldProxifyConcreteClassesWithComplexConstructorsAndPassNullForAllParameters() {
-        Proxifier proxifier = new ObjenesisProxifier();
         TheClassWithComplexConstructor proxy = proxifier.proxify(TheClassWithComplexConstructor.class, new MethodInvocation<TheClassWithComplexConstructor>() {
             public Object intercept(TheClassWithComplexConstructor proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return superMethod.invoke(proxy, args);
@@ -71,7 +76,6 @@ public class ObjenesisProxifierTest {
 
     @Test
     public void shouldNeverCallSuperclassConstructors() {
-        Proxifier proxifier = new ObjenesisProxifier();
         TheClassWithManyConstructors proxy = proxifier.proxify(TheClassWithManyConstructors.class, new MethodInvocation<TheClassWithManyConstructors>() {
             public Object intercept(TheClassWithManyConstructors proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return superMethod.invoke(proxy, args);
@@ -83,8 +87,7 @@ public class ObjenesisProxifierTest {
 
     @Test
 	public void shouldNotProxifyJavaLangObjectMethods() throws Exception {
-    	Proxifier proxifier = new ObjenesisProxifier();
-    	Object proxy = proxifier.proxify(ObjenesisProxifierTest.class, new MethodInvocation<Object>() {
+    	Object proxy = proxifier.proxify(JavassistProxifierTest.class, new MethodInvocation<Object>() {
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				Assert.fail("should not call this Method interceptor");
 				return null;

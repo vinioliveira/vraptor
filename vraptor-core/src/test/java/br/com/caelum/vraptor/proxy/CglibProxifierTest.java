@@ -20,6 +20,7 @@ package br.com.caelum.vraptor.proxy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Method;
@@ -27,19 +28,25 @@ import java.lang.reflect.Method;
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Fabio Kung
  */
-@SuppressWarnings("unchecked")
-public class DefaultProxifierTest {
+public class CglibProxifierTest {
 
+    private Proxifier proxifier;
+    
+    @Before
+    public void setUp() throws Exception {
+        proxifier= new CglibProxifier(new ObjenesisInstanceCreator());
+    }
+    
     @Test
     public void shouldProxifyInterfaces() {
-        Proxifier proxifier = new DefaultProxifier();
-        TheInterface proxy = (TheInterface) proxifier.proxify(TheInterface.class, new MethodInvocation() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+        TheInterface proxy = proxifier.proxify(TheInterface.class, new MethodInvocation<TheInterface>() {
+            public Object intercept(TheInterface proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return true;
             }
         });
@@ -48,9 +55,8 @@ public class DefaultProxifierTest {
 
     @Test
     public void shouldProxifyConcreteClassesWithDefaultConstructors() {
-        Proxifier proxifier = new DefaultProxifier();
-        TheClass proxy = (TheClass) proxifier.proxify(TheClass.class, new MethodInvocation() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+        TheClass proxy = proxifier.proxify(TheClass.class, new MethodInvocation<TheClass>() {
+            public Object intercept(TheClass proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return true;
             }
         });
@@ -59,9 +65,8 @@ public class DefaultProxifierTest {
 
     @Test
     public void shouldProxifyConcreteClassesWithComplexConstructorsAndPassNullForAllParameters() {
-        Proxifier proxifier = new DefaultProxifier();
-        TheClassWithComplexConstructor proxy = (TheClassWithComplexConstructor) proxifier.proxify(TheClassWithComplexConstructor.class, new MethodInvocation() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+        TheClassWithComplexConstructor proxy = proxifier.proxify(TheClassWithComplexConstructor.class, new MethodInvocation<TheClassWithComplexConstructor>() {
+            public Object intercept(TheClassWithComplexConstructor proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return superMethod.invoke(proxy, args);
             }
         });
@@ -70,21 +75,19 @@ public class DefaultProxifierTest {
     }
 
     @Test
-    public void shouldTryAllConstructorsInDeclarationOrder() {
-        Proxifier proxifier = new DefaultProxifier();
-        TheClassWithManyConstructors proxy = (TheClassWithManyConstructors) proxifier.proxify(TheClassWithManyConstructors.class, new MethodInvocation() {
-            public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
+    public void shouldNeverCallSuperclassConstructors() {
+        TheClassWithManyConstructors proxy = proxifier.proxify(TheClassWithManyConstructors.class, new MethodInvocation<TheClassWithManyConstructors>() {
+            public Object intercept(TheClassWithManyConstructors proxy, Method method, Object[] args, SuperMethod superMethod) {
                 return superMethod.invoke(proxy, args);
             }
         });
-        assertTrue(proxy.wasNumberConstructorCalled());
+        assertFalse(proxy.wasNumberConstructorCalled());
         assertThat(proxy.getNumber(), is(nullValue()));
     }
 
     @Test
 	public void shouldNotProxifyJavaLangObjectMethods() throws Exception {
-    	Proxifier proxifier = new DefaultProxifier();
-    	Object proxy = proxifier.proxify(DefaultProxifierTest.class, new MethodInvocation() {
+    	Object proxy = proxifier.proxify(CglibProxifierTest.class, new MethodInvocation<Object>() {
 			public Object intercept(Object proxy, Method method, Object[] args, SuperMethod superMethod) {
 				Assert.fail("should not call this Method interceptor");
 				return null;

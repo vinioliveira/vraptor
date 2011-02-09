@@ -44,7 +44,9 @@ import br.com.caelum.vraptor.http.route.Router;
 import br.com.caelum.vraptor.interceptor.ParametersInstantiatorInterceptor;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.ioc.Container;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
+import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.resource.ResourceMethod;
 
 public class DefaultLogicResultTest {
@@ -92,7 +94,8 @@ public class DefaultLogicResultTest {
 
 		when(request.getSession()).thenReturn(session);
 
-		this.logicResult = new DefaultLogicResult(new DefaultProxifier(), router, request, response, container,
+        Proxifier proxifier = new JavassistProxifier(new ObjenesisInstanceCreator());
+        this.logicResult = new DefaultLogicResult(proxifier, router, request, response, container,
 				resolver, extractor);
 	}
 

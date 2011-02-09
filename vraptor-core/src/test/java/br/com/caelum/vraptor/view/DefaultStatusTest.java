@@ -1,10 +1,10 @@
 package br.com.caelum.vraptor.view;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.EnumSet;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +17,8 @@ import org.mockito.MockitoAnnotations;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.config.Configuration;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.proxy.DefaultProxifier;
+import br.com.caelum.vraptor.proxy.JavassistProxifier;
+import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.resource.HttpMethod;
 
 public class DefaultStatusTest {
@@ -32,7 +33,7 @@ public class DefaultStatusTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		status = new DefaultStatus(response, result, config, new DefaultProxifier(), router);
+		status = new DefaultStatus(response, result, config, new JavassistProxifier(new ObjenesisInstanceCreator()), router);
 	}
 
 	@Test
@@ -109,15 +110,17 @@ public class DefaultStatusTest {
 		void method();
 	}
 
-	@Test
-	public void shouldSetMovedPermanentlyStatusOfLogic() throws Exception {
-		when(config.getApplicationPath()).thenReturn("http://myapp.com");
-		when(router.urlFor(eq(Resource.class), eq(Resource.class.getDeclaredMethod("method")), any(Object[].class))).thenReturn("/resource/method");
+    @Test
+    public void shouldSetMovedPermanentlyStatusOfLogic() throws Exception {
+        Method method = Resource.class.getDeclaredMethod("method");
+        
+        when(config.getApplicationPath()).thenReturn("http://myapp.com");
+        when(router.urlFor(eq(Resource.class), eq(method), new Object[0])).thenReturn("/resource/method");
+        
+        status.movedPermanentlyTo(Resource.class).method();
 
-		status.movedPermanentlyTo(Resource.class).method();
-
-		verify(response).setStatus(301);
-		verify(response).addHeader("Location", "http://myapp.com/resource/method");
-	}
+        verify(response).setStatus(301);
+        verify(response).addHeader("Location", "http://myapp.com/resource/method");
+    }
 
 }
