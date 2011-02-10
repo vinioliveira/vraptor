@@ -47,6 +47,7 @@ public class JavassistProxifier
     }
 
     public <T> T proxify(Class<T> type, MethodInvocation<? super T> handler) {
+        ProxyFactory.useCache = true;
         final ProxyFactory factory = new ProxyFactory();
         factory.setFilter(IGNORE_BRIDGE_AND_OBJECT_METHODS);
 

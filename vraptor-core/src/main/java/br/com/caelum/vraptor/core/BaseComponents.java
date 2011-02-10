@@ -122,6 +122,7 @@ import br.com.caelum.vraptor.proxy.JavassistProxifier;
 import br.com.caelum.vraptor.proxy.CglibProxifier;
 import br.com.caelum.vraptor.proxy.ObjenesisInstanceCreator;
 import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.ReflectionInstanceCreator;
 import br.com.caelum.vraptor.resource.DefaultMethodNotAllowedHandler;
 import br.com.caelum.vraptor.resource.DefaultResourceNotFoundHandler;
 import br.com.caelum.vraptor.resource.MethodNotAllowedHandler;
@@ -196,7 +197,7 @@ public class BaseComponents {
             RoutesConfiguration.class, 		NoRoutesConfiguration.class,
             Deserializers.class,			DefaultDeserializers.class,
             Proxifier.class, 				getProxifier(),
-            InstanceCreator.class,          ObjenesisInstanceCreator.class,
+            InstanceCreator.class,          getInstanceCreator(),
             ParameterNameProvider.class, 	ParanamerNameProvider.class,
             TypeFinder.class, 				DefaultTypeFinder.class,
             XMLDeserializer.class,			XStreamXMLDeserializer.class,
@@ -303,7 +304,15 @@ public class BaseComponents {
 		return DESERIALIZERS;
 	}
     
-    public static Class<? extends Proxifier> getProxifier() {
+    private static Class<? extends InstanceCreator> getInstanceCreator() {
+        if (isClassPresent("org.objenesis.ObjenesisStd")) {
+            return ObjenesisInstanceCreator.class;
+        }
+        
+        return ReflectionInstanceCreator.class;
+    }
+    
+    private static Class<? extends Proxifier> getProxifier() {
         if (isClassPresent("javassist.util.proxy.ProxyFactory")) {
             return JavassistProxifier.class;
         }
