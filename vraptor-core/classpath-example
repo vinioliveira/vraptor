@@ -54,11 +54,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/mandatory/javassist-3.9.0.GA.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/build/mockito-core-1.8.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
@@ -90,14 +85,6 @@
 	<classpathentry kind="lib" path="lib/containers/spring/aopalliance.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="lib/containers/spring/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.aop-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.asm-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.aspects-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.beans-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.context-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.core-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.expression-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.web-3.0.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/guava-r07.jar"/>
 	<classpathentry kind="lib" path="lib/optional/deserialization/jettison-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/optional/deserialization/xpp3_min-1.1.4c.jar"/>
@@ -131,5 +118,14 @@
 	<classpathentry kind="lib" path="lib/containers/guice/guice-3.0-rc2.jar"/>
 	<classpathentry kind="lib" path="lib/containers/guice/guice-multibindings-3.0-rc2.jar"/>
 	<classpathentry kind="lib" path="lib/mandatory/scannotation-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.aop-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.asm-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.aspects-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.beans-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.context-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.core-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.expression-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/containers/spring/org.springframework.web-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/mandatory/javassist-3.11.0.GA.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

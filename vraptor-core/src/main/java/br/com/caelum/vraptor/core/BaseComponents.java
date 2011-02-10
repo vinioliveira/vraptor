@@ -313,11 +313,11 @@ public class BaseComponents {
     }
     
     private static Class<? extends Proxifier> getProxifier() {
-        if (isClassPresent("javassist.util.proxy.ProxyFactory")) {
-            return JavassistProxifier.class;
+        if (isClassPresent("net.sf.cglib.proxy.Factory")) {
+            return CglibProxifier.class;
         }
 
-        return CglibProxifier.class;
+        return JavassistProxifier.class;
     }
 
     private static Class<? extends ProxyInitializer> getProxyInitializerImpl() {
